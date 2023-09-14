@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "customer")
+//@CrossOrigin
 public class CustomerController {
     private final CustomerService customerService;
     @Autowired        // Dependency injection
@@ -24,37 +25,40 @@ public class CustomerController {
     }
 
     // Get all customers
-    @GetMapping("/customers")
+    @GetMapping("/customers/{userId}")
     // public List<Customer> getCustomers() {
     //    return customerService.getCustomers();
     //}
-    public ResponseEntity<Optional<List<Customer>>> getCustomers() {
+    public ResponseEntity<Optional<List<Customer>>> getCustomers(@PathVariable("userId") String userId) {
         Optional<List<Customer>> customers;
-        customers = customerService.getCustomers();
+        customers = customerService.getCustomers(userId);
         return ResponseEntity.ok(customers);
     }
 
 
     // Get customer by id
-    @GetMapping("/customer/id/{id}")
-    public ResponseEntity<Optional<Customer>> getCustomerById(@PathVariable("id") long id) {
+    @GetMapping("/customer/id/{userId}/{id}")
+    public ResponseEntity<Optional<Customer>> getCustomerById(@PathVariable("userId") String userId,
+                                                              @PathVariable("id") long id) {
         Optional<Customer> customer;
-        customer = customerService.getCustomer(id);
+        customer = customerService.getCustomer(userId, id);
         return ResponseEntity.ok(customer);
     }
 
     // get customer by email
-    @GetMapping("/customer/email/{email}")
-    public ResponseEntity<Optional<Customer>> getCustomerByEmail(@PathVariable("email") String email) {
+    @GetMapping("/customer/email/{userId}/{email}")
+    public ResponseEntity<Optional<Customer>> getCustomerByEmail(@PathVariable("userId") String userId,
+                                                                 @PathVariable("email") String email) {
         Optional<Customer> customer;
-        customer = customerService.getCustomerByEmail(email);
+        customer = customerService.getCustomerByEmail(userId,email);
         return ResponseEntity.ok(customer);
     }
 
     // Register new customer
-    @PostMapping("/customer")
-    public ResponseEntity<CustomerResponse> registerCustomer(@RequestBody Customer customer) {
-        customerService.addCustomer(customer);
+    @PostMapping("/customer/{userId}")
+    public ResponseEntity<CustomerResponse> registerCustomer(@PathVariable("userId") String userId,
+                                                             @RequestBody Customer customer) {
+        customerService.addCustomer(userId, customer);
 
         CustomerResponse response = new CustomerResponse();
         response.setStatus(HttpStatus.OK.value());
@@ -63,10 +67,11 @@ public class CustomerController {
         return ResponseEntity.ok(response);
     }
 
-    // Add update Customer
-    @PutMapping("/customer")
-    public ResponseEntity<CustomerResponse> updateCustomer(@RequestBody Customer customer) {
-        customerService.updateCustomer(customer);
+    //  update Customer
+    @PatchMapping("/customer/{userId}")
+    public ResponseEntity<CustomerResponse> updateCustomer(@PathVariable("userId") String userId,
+                                                           @RequestBody Customer customer) {
+        customerService.updateCustomer(userId, customer);
         CustomerResponse response = new CustomerResponse();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Customer updated");

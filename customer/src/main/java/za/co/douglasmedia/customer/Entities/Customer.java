@@ -16,11 +16,11 @@ public class Customer {
             generator = "customer_sequence"
             // how the id and sequence are generated
     )
-    private Long custId;
-    private String name, firstname, lastname, email, phone, website, Address;
+    private Long customerId;
+    private String name, firstname, lastname, email, phone, website, Address, userId;
     private boolean deleted;
 
-    public Customer(Long custId,
+    public Customer(Long customerId,
                     String name,
                     String firstname,
                     String lastname,
@@ -28,8 +28,9 @@ public class Customer {
                     String phone,
                     String website,
                     String address,
+                    String userId,
                     boolean deleted) {
-        this.custId = custId;
+        this.customerId = customerId;
         this.name = name;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -37,10 +38,11 @@ public class Customer {
         this.phone = phone;
         this.website = website;
         Address = address;
+        this.userId = userId;
         this.deleted = deleted;
     }
 
-    // Database will generate id for us we need a constructor without id
+    // Database will generate id for us, we need a constructor without id
     public Customer(String name,
                     String firstname,
                     String lastname,
@@ -48,6 +50,7 @@ public class Customer {
                     String phone,
                     String website,
                     String address,
+                    String userId,
                     boolean deleted) {
         this.name = name;
         this.firstname = firstname;
@@ -56,18 +59,27 @@ public class Customer {
         this.phone = phone;
         this.website = website;
         Address = address;
+        this.userId = userId;
         this.deleted = deleted;
     }
 
     public Customer() {
     }
 
-    public Long getCustId() {
-        return custId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCustId(Long custId) {
-        this.custId = custId;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public String getName() {
@@ -137,7 +149,7 @@ public class Customer {
     @Override
     public String toString() {
         return "Customer{" +
-                "custId=" + custId +
+                "customerId=" + customerId +
                 ", name='" + name + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
@@ -145,6 +157,7 @@ public class Customer {
                 ", phone='" + phone + '\'' +
                 ", website='" + website + '\'' +
                 ", Address='" + Address + '\'' +
+                ", userId='" + userId + '\'' +
                 ", deleted=" + deleted +
                 '}';
     }

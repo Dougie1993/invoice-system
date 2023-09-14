@@ -26,8 +26,8 @@ public class CustomerService {
     }
 
     // get customers
-    public Optional<List<Customer>> getCustomers() {
-        Optional<List<Customer>> customers = customerRepository.findAllCustomersNotDeleted();
+    public Optional<List<Customer>> getCustomers(String userId) {
+        Optional<List<Customer>> customers = customerRepository.findAllCustomersNotDeleted(userId);
         if(!customers.isPresent() || customers.get().isEmpty()) {
             throw new CustomerNotFoundException("No Customers saved");
         } else {
@@ -37,8 +37,8 @@ public class CustomerService {
     }
 
     // Get Customer by Id
-    public Optional<Customer> getCustomer(long id){
-        Optional<Customer> customerById = customerRepository.findCustomerByIdAndNotDeleted(id);
+    public Optional<Customer> getCustomer(String userId, long id){
+        Optional<Customer> customerById = customerRepository.findCustomerByIdAndNotDeleted(userId, id);
         if(!customerById.isPresent()) {
             throw new CustomerNotFoundException("Customer requested not found");
         } else {
@@ -47,8 +47,8 @@ public class CustomerService {
 
     }
     // Get by email NB* email has to be unique for each customer/business
-    public Optional<Customer> getCustomerByEmail(String email){
-        Optional<Customer> customerByEmail = customerRepository.findCustomerByEmailAndNotDeleted(email);
+    public Optional<Customer> getCustomerByEmail(String userId, String email){
+        Optional<Customer> customerByEmail = customerRepository.findCustomerByEmailAndNotDeleted(userId,email);
         if(!customerByEmail.isPresent()) {
             throw new CustomerNotFoundException("Customer requested not found");
         } else {
@@ -57,8 +57,8 @@ public class CustomerService {
     }
 
     // Add new Customer with unique email
-    public void addCustomer(Customer customer) {
-        Optional<Customer> customerByEmail = customerRepository.findCustomerByEmailAndNotDeleted(customer.getEmail());
+    public void addCustomer(String userId, Customer customer) {
+        Optional<Customer> customerByEmail = customerRepository.findCustomerByEmailAndNotDeleted(userId, customer.getEmail());
         if(customerByEmail.isPresent()) {
             throw new DuplicateEmailException("Customer with email " + customer.getEmail() + " already exists");
         } else {
@@ -68,9 +68,9 @@ public class CustomerService {
     }
 
     // Update customer by id
-    public void updateCustomer(Customer customer) {
-        if (customer.getCustId() != null) {
-            Optional<Customer> updateCustomer = getCustomer(customer.getCustId());
+    public void updateCustomer(String userId, Customer customer) {
+        if (customer.getCustomerId() != null) {
+            Optional<Customer> updateCustomer = getCustomer(userId, customer.getCustomerId());
             if (updateCustomer.isPresent()) {
                 customerRepository.save(customer);
             } else {

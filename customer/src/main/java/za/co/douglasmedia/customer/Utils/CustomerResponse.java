@@ -31,7 +31,7 @@ public class CustomerResponse {
     }
 
     public void setCustomer(Customer customer) {
-        this.custId = customer.getCustId();
+        this.custId = customer.getCustomerId();
         this.name = customer.getName();
         this.firstname = customer.getFirstname();
         this.lastname = customer.getLastname();
