@@ -9,18 +9,18 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    @Query("SELECT p FROM Product p Where p.deleted = false")
-    Optional<List<Product>> findAllProductsNotDeleted();
+    @Query("SELECT p FROM Product p Where p.userId = ?1 AND p.deleted = false")
+    Optional<List<Product>> findAllProductsNotDeleted(String userId);
 
-    @Query("SELECT p FROM Product p Where p.name = ?1 AND p.deleted = false")
-    Optional<Product> findProductByNameAndNotDeleted(String name);
+    @Query("SELECT p FROM Product p Where p.userId = ?1 AND p.name = ?2 AND p.deleted = false")
+    Optional<Product> findProductByNameAndNotDeleted(String userId, String name);
 
-    @Query("SELECT p FROM Product p WHERE p.productId = ?1 AND p.deleted = false")
-    Optional<Product> findProductByIdAndNotDeleted(long productId);
+    @Query("SELECT p FROM Product p WHERE p.userId = ?1 AND p.productId = ?2 AND p.deleted = false")
+    Optional<Product> findProductByIdAndNotDeleted(String userId, long productId);
 
     @Modifying
-    @Query("UPDATE Product p SET p.description = ?1, p.price = ?2, p.category = ?3, p.deleted = ?4 WHERE p.name = ?5 AND p.deleted = false")
-    void updateProductByName(String description, double price, Product.Category category, boolean deleted, String name);
+    @Query("UPDATE Product p SET p.description = ?1, p.price = ?2, p.category = ?3, p.deleted = ?4 WHERE p.userId = ?5 AND p.name = ?6 AND p.deleted = false")
+    void updateProductByName(String description, double price, Product.Category category, boolean deleted, String userId, String name);
 
 
 }

@@ -4,6 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 
 @SpringBootApplication
 @EnableDiscoveryClient //add this line to register on eureka
@@ -14,11 +17,18 @@ import org.springframework.context.annotation.ComponentScan;
 		"za.co.douglasmedia.product.Entities",
 		"za.co.douglasmedia.product.Utils"
 })
-public class ProductApplication {
+public class ProductApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProductApplication.class, args);
 		System.out.println("Product Service is running");
+	}
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**")
+				.allowedOrigins("*") // will set my front-end origin here (e.g., http://localhost:4200)
+				.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+				.allowedHeaders("*");
 	}
 
 }

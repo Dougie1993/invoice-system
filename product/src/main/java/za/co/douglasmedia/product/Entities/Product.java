@@ -18,7 +18,7 @@ public class Product {
     )
 
     private long productId;
-    private String name,description;
+    private String name,description, userId;
     private double price;
     private boolean deleted;
 
@@ -34,18 +34,20 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String description, double price, boolean deleted, Category category) {
+    public Product(String name, String description, String userId, double price, boolean deleted, Category category) {
         this.name = name;
         this.description = description;
+        this.userId = userId;
         this.price = price;
         this.deleted = deleted;
         this.category = category;
     }
 
-    public Product(long productId, String name, String description, double price, boolean deleted, Category category) {
+    public Product(long productId, String name, String description, String userId, double price, boolean deleted, Category category) {
         this.productId = productId;
         this.name = name;
         this.description = description;
+        this.userId = userId;
         this.price = price;
         this.deleted = deleted;
         this.category = category;
@@ -73,6 +75,14 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public double getPrice() {
@@ -105,6 +115,7 @@ public class Product {
                 "productId=" + productId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", userId='" + userId + '\'' +
                 ", price=" + price +
                 ", deleted=" + deleted +
                 ", category=" + category +

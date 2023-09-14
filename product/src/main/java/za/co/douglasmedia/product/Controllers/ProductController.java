@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "product")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ProductController {
     private final ProductService productService;
 
@@ -24,30 +25,33 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/products")
-    public ResponseEntity<Optional<List<Product>>> getProducts() {
+    @GetMapping("/products/{userId}")
+    public ResponseEntity<Optional<List<Product>>> getProducts(@PathVariable("userId") String userId) {
         Optional<List<Product>> products;
-        products = productService.getProducts();
+        products = productService.getProducts(userId);
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("product/name/{name}")
-    public ResponseEntity<Optional<Product>> getProductByName(@PathVariable("name") String name) {
+    @GetMapping("product/name/{userId}/{name}")
+    public ResponseEntity<Optional<Product>> getProductByName(@PathVariable("userId") String userId,
+                                                              @PathVariable("name") String name) {
         Optional<Product> product;
-        product = productService.getProductByName(name);
+        product = productService.getProductByName(userId, name);
         return ResponseEntity.ok(product);
     }
 
-    @GetMapping("product/id/{productId}")
-    public ResponseEntity<Optional<Product>> getProductById(@PathVariable("productId") long productId) {
+    @GetMapping("product/id/{userId}/{productId}")
+    public ResponseEntity<Optional<Product>> getProductById(@PathVariable("userId") String userId,
+                                                            @PathVariable("productId") long productId) {
         Optional<Product> product;
-        product = productService.getProductById(productId);
+        product = productService.getProductById(userId, productId);
         return ResponseEntity.ok(product);
     }
 
-    @PostMapping("/product")
-    public ResponseEntity<ProductResponse> addProduct(@RequestBody Product product) {
-        productService.addProduct(product);
+    @PostMapping("/product/{userId}")
+    public ResponseEntity<ProductResponse> addProduct(@PathVariable("userId") String userId,
+                                                      @RequestBody Product product) {
+        productService.addProduct(userId, product);
 
         ProductResponse response = new ProductResponse();
         response.setStatus(HttpStatus.OK.value());
@@ -56,9 +60,10 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/product")
-    public ResponseEntity<ProductResponse> updateProduct(@RequestBody Product product) {
-        productService.updateProduct(product);
+    @PatchMapping("/product/{userId}")
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable("userId") String userId,
+                                                         @RequestBody Product product) {
+        productService.updateProduct(userId, product);
 
         ProductResponse response = new ProductResponse();
         response.setStatus(HttpStatus.OK.value());
