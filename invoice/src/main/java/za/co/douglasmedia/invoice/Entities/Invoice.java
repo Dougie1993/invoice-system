@@ -24,6 +24,7 @@ public class Invoice {
     private Date dateCreated, dueDate;
     private float amountDue, totalCost, amountPaid;
     private long customerId;
+    private String userId;
     boolean deleted;
 
     @Enumerated(EnumType.STRING)
@@ -41,18 +42,19 @@ public class Invoice {
     public Invoice() {
     }
 
-    public Invoice(Date dateCreated, Date dueDate, float amountDue, float totalCost, float amountPaid, long customerId, Status status, boolean deleted) {
+    public Invoice(Date dateCreated, Date dueDate, float amountDue, float totalCost, float amountPaid, long customerId, String userId, boolean deleted, Status status) {
         this.dateCreated = dateCreated;
         this.dueDate = dueDate;
         this.amountDue = amountDue;
         this.totalCost = totalCost;
         this.amountPaid = amountPaid;
         this.customerId = customerId;
-        this.status = status;
+        this.userId = userId;
         this.deleted = deleted;
+        this.status = status;
     }
 
-    public Invoice(long invoiceId, Date dateCreated, Date dueDate, float amountDue, float totalCost, float amountPaid, long customerId, Status status, boolean deleted) {
+    public Invoice(long invoiceId, Date dateCreated, Date dueDate, float amountDue, float totalCost, float amountPaid, long customerId, String userId, boolean deleted, Status status) {
         this.invoiceId = invoiceId;
         this.dateCreated = dateCreated;
         this.dueDate = dueDate;
@@ -60,8 +62,17 @@ public class Invoice {
         this.totalCost = totalCost;
         this.amountPaid = amountPaid;
         this.customerId = customerId;
-        this.status = status;
+        this.userId = userId;
         this.deleted = deleted;
+        this.status = status;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public long getInvoiceId() {
@@ -146,6 +157,7 @@ public class Invoice {
                 ", totalCost=" + totalCost +
                 ", amountPaid=" + amountPaid +
                 ", customerId=" + customerId +
+                ", userId='" + userId + '\'' +
                 ", deleted=" + deleted +
                 ", status=" + status +
                 '}';

@@ -32,8 +32,8 @@ public class InvoiceService {
     }
 
     // Get invoices belonging to a customer
-    public Optional<List<Invoice>> getCustomerInvoices(long customerId) {
-        Optional<List<Invoice>> invoices = invoiceRepository.findAllInvoicesForCustomerNotDeleted(customerId);
+    public Optional<List<Invoice>> getCustomerInvoices(String userId, long customerId) {
+        Optional<List<Invoice>> invoices = invoiceRepository.findAllInvoicesForCustomerNotDeleted(userId, customerId);
         if(invoices.isEmpty() || invoices.get().isEmpty()){
             throw new InvoiceNotFoundException("No Invoices found");
         } else {
@@ -42,8 +42,8 @@ public class InvoiceService {
     }
 
     // Get invoice by invoiceId
-    public Optional<Invoice> getInvoiceById(long invoiceId) {
-        Optional<Invoice> invoiceById = invoiceRepository.findInvoiceByIdAndNotDeleted(invoiceId);
+    public Optional<Invoice> getInvoiceById(String userId, long invoiceId) {
+        Optional<Invoice> invoiceById = invoiceRepository.findInvoiceByIdAndNotDeleted(userId, invoiceId);
         if(invoiceById.isEmpty()) {
             throw new InvoiceNotFoundException("Invoice Not Found");
         } else  {
@@ -51,11 +51,21 @@ public class InvoiceService {
         }
     }
 
+    // Get all invoices for user
+    public Optional<List<Invoice>> getInvoices(String userId) {
+        Optional<List<Invoice>> invoices = invoiceRepository.findAllInvoicesForUserNotDeleted(userId);
+        if(invoices.isEmpty() || invoices.get().isEmpty()) {
+            throw new InvoiceNotFoundException("Invoice Not Found");
+        } else  {
+            return invoices;
+        }
+    }
+
     // Update invoice
     @Transactional
-    public void updateInvoice(Invoice invoice) {
+    public void updateInvoice(String userId, Invoice invoice) {
         //InvoiceId, Date Created and CustomerId cannot be updated
-        Optional<Invoice> updateInvoice = getInvoiceById(invoice.getInvoiceId());
+        Optional<Invoice> updateInvoice = getInvoiceById(userId, invoice.getInvoiceId());
         if(updateInvoice.isPresent()){
             invoiceRepository.updateInvoiceById(
                     invoice.getAmountDue(),
@@ -64,6 +74,7 @@ public class InvoiceService {
                     invoice.getTotalCost(),
                     invoice.getAmountPaid(),
                     invoice.isDeleted(),
+                    invoice.getUserId(),
                     invoice.getInvoiceId()
             );
         } else {
@@ -71,6 +82,8 @@ public class InvoiceService {
         }
 
     }
+
+    // get invoices with customer
 
     // Helper Methods
     private boolean validateInvoice(Invoice invoice) {
